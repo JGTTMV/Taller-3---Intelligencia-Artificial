@@ -9,6 +9,9 @@
 
 #include <iostream>
 #include <ctime>
+#include <chrono>
+#include <vector>
+#include <iomanip>
 
 using namespace std;
 
@@ -37,38 +40,46 @@ int main()
 
     cout << endl;
 
-    cout << "Seleccione el jugador para O" << endl;
     cout << "1. Humano" << endl;
     cout << "2. Random" << endl;
     cout << "3. MinMax" << endl;
     cout << "4. AlphaBeta" << endl;
     cout << "5. NegaMax" << endl;
+    cout << "Seleccione el jugador para O: " << endl;
     cin >> tipoJugadorO;
 
     cout << endl;
 
-    cout << "Seleccione el jugador para X" << endl;
     cout << "1. Humano" << endl;
     cout << "2. Random" << endl;
     cout << "3. MinMax" << endl;
     cout << "4. AlphaBeta" << endl;
     cout << "5. NegaMax" << endl;
+    cout << "Seleccione el jugador para X: " << endl;
     cin >> tipoJugadorX;
 
     cout << endl;
+
+    //Vectores para el calculo de estadisticas de tiempo
+    vector<double> tiempos_P1; //Jugador X
+    vector<double> tiempos_P2; //Jugador O
 
     while (!st.full() && check_winner(st) == 0)
     {
         st.print();
 
         pair<int, int> movimiento;
+        chrono::high_resolution_clock::time_point inicio, fin;
+        chrono::duration<double, milli> duracion;
 
-        // turno P1
+        //turno P1
         if (st.get_to_move() == State::P1)
         {
             cout << "Turno jugador "
                  << State::DISP[State::P1 + 1]
                  << endl;
+
+            inicio = chrono::high_resolution_clock::now();
 
             if (tipoJugadorX == 1)
             {
@@ -90,13 +101,19 @@ int main()
             {
                 movimiento = jugador_negamax(st, profundidadMax);
             }
+
+            fin = chrono::high_resolution_clock::now();
+            duracion = fin - inicio;
+            tiempos_P1.push_back(duracion.count());
         }
-        // turno P2
+        //turno P2
         else
         {
             cout << "Turno jugador "
                  << State::DISP[State::P2 + 1]
                  << endl;
+
+            inicio = chrono::high_resolution_clock::now();
 
             if (tipoJugadorO == 1)
             {
@@ -118,6 +135,10 @@ int main()
             {
                 movimiento = jugador_negamax(st, profundidadMax);
             }
+
+            fin = chrono::high_resolution_clock::now();
+            duracion = fin - inicio;
+            tiempos_P2.push_back(duracion.count());
         }
 
         st.make_move(movimiento.first, movimiento.second);
@@ -138,6 +159,33 @@ int main()
     else
     {
         cout << "Empate" << endl;
+    }
+
+    //Imprime las estadisticas de tiempo para cada jugador
+    cout << "\n--- ESTADISTICAS DE TIEMPO ---\n" << endl;
+
+    if (!tiempos_P1.empty())
+    {
+        double suma_P1 = 0;
+        for (double t : tiempos_P1) suma_P1 += t;
+        double promedio_P1 = suma_P1 / tiempos_P1.size();
+        cout << "Jugador " << State::DISP[State::P1 + 1] << " (X):" << endl;
+        cout << "  Numero de turnos: " << tiempos_P1.size() << endl;
+        cout << fixed << setprecision(2);
+        cout << "  Tiempo promedio por turno: " << promedio_P1 << " ms" << endl;
+        cout << "  Tiempo total: " << suma_P1 << " ms" << endl;
+    }
+
+    if (!tiempos_P2.empty())
+    {
+        double suma_P2 = 0;
+        for (double t : tiempos_P2) suma_P2 += t;
+        double promedio_P2 = suma_P2 / tiempos_P2.size();
+        cout << "Jugador " << State::DISP[State::P2 + 1] << " (O):" << endl;
+        cout << "  Numero de turnos: " << tiempos_P2.size() << endl;
+        cout << fixed << setprecision(2);
+        cout << "  Tiempo promedio por turno: " << promedio_P2 << " ms" << endl;
+        cout << "  Tiempo total: " << suma_P2 << " ms" << endl;
     }
 
     return 0;
