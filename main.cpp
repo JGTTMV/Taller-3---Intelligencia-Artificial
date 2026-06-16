@@ -45,7 +45,7 @@ int main()
     cout << "3. MinMax" << endl;
     cout << "4. AlphaBeta" << endl;
     cout << "5. NegaMax" << endl;
-    cout << "Seleccione el jugador para O: " << endl;
+    cout << "Seleccione el jugador para O: ";
     cin >> tipoJugadorO;
 
     cout << endl;
@@ -55,7 +55,7 @@ int main()
     cout << "3. MinMax" << endl;
     cout << "4. AlphaBeta" << endl;
     cout << "5. NegaMax" << endl;
-    cout << "Seleccione el jugador para X: " << endl;
+    cout << "Seleccione el jugador para X: ";
     cin >> tipoJugadorX;
 
     cout << endl;
@@ -64,6 +64,11 @@ int main()
     vector<double> tiempos_P1; //Jugador X
     vector<double> tiempos_P2; //Jugador O
 
+    vector<int> nodos_P1;
+    vector<int> nodos_P2;
+    vector<int> profundidad_P1;
+    vector<int> profundidad_P2;
+
     while (!st.full() && check_winner(st) == 0)
     {
         st.print();
@@ -71,6 +76,8 @@ int main()
         pair<int, int> movimiento;
         chrono::high_resolution_clock::time_point inicio, fin;
         chrono::duration<double, milli> duracion;
+        int nodosVisitados = 0;
+        int profundidadMaxAlcanzada = 0;
 
         //turno P1
         if (st.get_to_move() == State::P1)
@@ -91,20 +98,22 @@ int main()
             }
             else if(tipoJugadorX == 3)
             {
-                movimiento = jugador_minmax(st, profundidadMax);
+                movimiento = jugador_minmax(st, profundidadMax, nodosVisitados, profundidadMaxAlcanzada);
             }
             else if (tipoJugadorX == 4)
             {
-                movimiento = jugador_alphabeta(st, profundidadMax);
+                movimiento = jugador_alphabeta(st, profundidadMax, nodosVisitados, profundidadMaxAlcanzada);
             }
             else if (tipoJugadorX == 5)
             {
-                movimiento = jugador_negamax(st, profundidadMax);
+                movimiento = jugador_negamax(st, profundidadMax, nodosVisitados, profundidadMaxAlcanzada);
             }
 
             fin = chrono::high_resolution_clock::now();
             duracion = fin - inicio;
             tiempos_P1.push_back(duracion.count());
+            nodos_P1.push_back(nodosVisitados);
+            profundidad_P1.push_back(profundidadMaxAlcanzada);
         }
         //turno P2
         else
@@ -125,20 +134,22 @@ int main()
             }
             else if(tipoJugadorO == 3)
             {
-                movimiento = jugador_minmax(st, profundidadMax);
+                movimiento = jugador_minmax(st, profundidadMax, nodosVisitados, profundidadMaxAlcanzada);
             }
             else if (tipoJugadorO == 4)
             {
-                movimiento = jugador_alphabeta(st, profundidadMax);
+                movimiento = jugador_alphabeta(st, profundidadMax, nodosVisitados, profundidadMaxAlcanzada);
             }
             else if (tipoJugadorO == 5)
             {
-                movimiento = jugador_negamax(st, profundidadMax);
+                movimiento = jugador_negamax(st, profundidadMax, nodosVisitados, profundidadMaxAlcanzada);
             }
 
             fin = chrono::high_resolution_clock::now();
             duracion = fin - inicio;
             tiempos_P2.push_back(duracion.count());
+            nodos_P2.push_back(nodosVisitados);
+            profundidad_P2.push_back(profundidadMaxAlcanzada);
         }
 
         st.make_move(movimiento.first, movimiento.second);
@@ -162,7 +173,7 @@ int main()
     }
 
     //Imprime las estadisticas de tiempo para cada jugador
-    cout << "\n--- ESTADISTICAS DE TIEMPO ---\n" << endl;
+    cout << "\n--- ESTADISTICAS DE PELEA ---\n" << endl;
 
     if (!tiempos_P1.empty())
     {
@@ -186,6 +197,13 @@ int main()
         cout << fixed << setprecision(2);
         cout << "  Tiempo promedio por turno: " << promedio_P2 << " ms" << endl;
         cout << "  Tiempo total: " << suma_P2 << " ms" << endl;
+
+        int totalNodosP2 = 0;
+        int maxProfP2 = 0;
+        for (int n : nodos_P2) totalNodosP2 += n;
+        for (int p : profundidad_P2) if (p > maxProfP2) maxProfP2 = p;
+        cout << endl << "Nodos visitados totales: " << totalNodosP2 << endl;
+        cout << "Profundidad maxima alcanzada: " << maxProfP2 << endl;
     }
 
     return 0;

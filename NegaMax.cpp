@@ -5,8 +5,14 @@
 #include "NegaMax.h"
 #include "GameLogic.h"
 
-int negamax(State st, int color, int profundidad, int profundidadMax, int jugadorIA)
+int negamax(State st, int color, int profundidad, int profundidadMax, int jugadorIA, int& nodosVisitados, int& profundidadMaxAlcanzada)
 {
+    nodosVisitados++;
+    if (profundidad > profundidadMaxAlcanzada)
+    {
+        profundidadMaxAlcanzada = profundidad;
+    }
+
     if (juego_terminado(st))
     {
         int ganador = check_winner(st);
@@ -33,7 +39,7 @@ int negamax(State st, int color, int profundidad, int profundidadMax, int jugado
                 State hijo = st;
                 hijo.make_move(x, y);
 
-                int valor = -negamax(hijo, -color, profundidad + 1, profundidadMax, jugadorIA);
+                int valor = -negamax(hijo, -color, profundidad + 1, profundidadMax, jugadorIA, nodosVisitados, profundidadMaxAlcanzada);
 
                 if (valor > mejor)
                     mejor = valor;
@@ -43,14 +49,16 @@ int negamax(State st, int color, int profundidad, int profundidadMax, int jugado
 
     return mejor;
 }
-std::pair<int,int> jugador_negamax(const State& st, int profundidadMax)
+std::pair<int,int> jugador_negamax(const State& st, int profundidadMax, int& nodosVisitados, int& profundidadMaxAlcanzada)
 {
     int jugadorIA = st.get_to_move();
     int mejorValor = -100000;
     int mejorX = -1;
     int mejorY = -1;
-
     int color = 1;
+
+    nodosVisitados = 0;
+    profundidadMaxAlcanzada = 0;
 
     for (int y = 0; y < st.get_rows(); y++)
     {
@@ -61,7 +69,7 @@ std::pair<int,int> jugador_negamax(const State& st, int profundidadMax)
                 State hijo = st;
                 hijo.make_move(x, y);
 
-                int valor = -negamax(hijo, -color, 1, profundidadMax, jugadorIA);
+                int valor = -negamax(hijo, -color, 1, profundidadMax, jugadorIA, nodosVisitados, profundidadMaxAlcanzada);
 
                 if (valor > mejorValor)
                 {

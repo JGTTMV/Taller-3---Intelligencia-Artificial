@@ -4,8 +4,14 @@
 
 #include <utility>
 
-int minmax(State st,int jugadorIA,int profundidad,int profundidadMax)
+int minmax(State st, int jugadorIA, int profundidad, int profundidadMax, int& nodosVisitados, int& profundidadMaxAlcanzada)
 {
+    nodosVisitados++;
+    if (profundidad > profundidadMaxAlcanzada)
+    {
+        profundidadMaxAlcanzada = profundidad;
+    }
+
     if (juego_terminado(st))
     {
         int ganador = check_winner(st);
@@ -44,7 +50,7 @@ int minmax(State st,int jugadorIA,int profundidad,int profundidadMax)
 
                     hijo.make_move(x, y);
 
-                    int valor = minmax(hijo,jugadorIA,profundidad + 1,profundidadMax);
+                    int valor = minmax(hijo, jugadorIA, profundidad + 1, profundidadMax, nodosVisitados, profundidadMaxAlcanzada);
 
                     if (valor > mejor)
                     {
@@ -70,7 +76,7 @@ int minmax(State st,int jugadorIA,int profundidad,int profundidadMax)
 
                     hijo.make_move(x, y);
 
-                    int valor = minmax(hijo,jugadorIA,profundidad + 1,profundidadMax);
+                    int valor = minmax(hijo, jugadorIA, profundidad + 1, profundidadMax, nodosVisitados, profundidadMaxAlcanzada);
 
                     if (valor < mejor)
                     {
@@ -84,13 +90,15 @@ int minmax(State st,int jugadorIA,int profundidad,int profundidadMax)
     }
 }
 
-std::pair<int, int> jugador_minmax(const State& st,int profundidadMax)
+std::pair<int, int> jugador_minmax(const State& st, int profundidadMax, int& nodosVisitados, int& profundidadMaxAlcanzada)
 {
     int mejorValor = -2;
     int mejorX = -1;
     int mejorY = -1;
 
     int jugadorIA = st.get_to_move();
+    nodosVisitados = 0;
+    profundidadMaxAlcanzada = 0;
 
     for (int y = 0; y < st.get_rows(); ++y)
     {
@@ -102,7 +110,7 @@ std::pair<int, int> jugador_minmax(const State& st,int profundidadMax)
 
                 hijo.make_move(x, y);
 
-                int valor = minmax(hijo,jugadorIA,1,profundidadMax);
+                int valor = minmax(hijo, jugadorIA, 1, profundidadMax, nodosVisitados, profundidadMaxAlcanzada);
 
                 if (valor > mejorValor)
                 {
