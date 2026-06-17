@@ -1,4 +1,5 @@
-// Angel Leyton y Josefina Valdebenito 
+// Angel Leyton y Josefina Valdebenito
+ 
 #ifndef NEGAMAX_H
 #define NEGAMAX_H
 

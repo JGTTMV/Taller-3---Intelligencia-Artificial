@@ -1,13 +1,16 @@
 // Angel Leyton y Josefina Valdebenito 
+
 #include "GameLogic.h"
 
 int check_winner(const State& st)
 {
+    //Revisa todas las filas, columnas y diagonales del tablero para verificar si hay un ganador, buscando secuencias de k fichas iguales
     int filas = st.get_rows();
     int columnas = st.get_cols();
     int k = st.get_k();
     int heuristica(const State& st, int jugadorIA);
 
+    //Direcciones para revisar: horizontal, vertical, diagonal descendente y diagonal ascendente
     int dx[4] = {1, 0, 1, 1};
     int dy[4] = {0, 1, 1, -1};
 
@@ -64,7 +67,7 @@ bool juego_terminado(const State& st)
     return st.full() || check_winner(st) != 0;
 }
 
-int heuristica(const State& st, int jugadorIA)
+int heuristica(const State& st, int jugadorIA) //Funcion heuristica simple que asigna puntos por cada ficha del jugador IA y resta puntos por cada ficha del oponente
 {
     int puntos = 0;
 

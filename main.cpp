@@ -1,4 +1,5 @@
 // Angel Leyton y Josefina Valdebenito 
+//Para Compilar: g++ main.cpp State.cpp GameLogic.cpp Jugador.cpp MinMax.cpp AlphaBeta.cpp NegaMax.cpp -o juego
 
 #include "State.h"
 #include "GameLogic.h"

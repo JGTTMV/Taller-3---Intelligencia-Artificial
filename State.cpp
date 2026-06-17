@@ -1,4 +1,5 @@
 // Angel Leyton y Josefina Valdebenito 
+
 #include "State.h"
 
 #include <cassert>
@@ -9,7 +10,7 @@ using namespace std;
 
 const array<char, 3> State::DISP = {{ 'o', '-', 'x' }};
 
-State::State(int columnas_, int filas_, int k_)
+State::State(int columnas_, int filas_, int k_) //Constructor de la clase State, inicializa el tablero y los parametros del juego
 {
     columnas = columnas_;
     filas = filas_;

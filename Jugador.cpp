@@ -1,4 +1,5 @@
 // Angel Leyton y Josefina Valdebenito 
+
 #include "Jugador.h"
 
 #include <iostream>
@@ -11,7 +12,7 @@ pair<int, int> jugador_humano(const State& st)
     int x;
     int y;
 
-    while (true)
+    while (true) //Ciclo de juego que toma inputs del jugador humano hasta que se ingresa un movimiento valido
     {
         cout << "Ingrese X Y: ";
         cin >> x >> y;
@@ -33,7 +34,7 @@ pair<int, int> jugador_humano(const State& st)
     }
 }
 
-pair<int, int> jugador_aleatorio(const State& st)
+pair<int, int> jugador_aleatorio(const State& st) //Funcion para el jugador aleatorio, genera movimientos aleatorios hasta encontrar uno valido
 {
     while (true)
     {

@@ -1,4 +1,5 @@
 // Angel Leyton y Josefina Valdebenito 
+
 #include "MinMax.h"
 #include "GameLogic.h"
 
@@ -34,9 +35,9 @@ int minmax(State st, int jugadorIA, int profundidad, int profundidadMax, int& no
         return heuristica(st, jugadorIA);
     }
 
-    bool maximiza = (st.get_to_move() == jugadorIA);
+    bool maximiza = (st.get_to_move() == jugadorIA); //Determina si el jugador actual es el jugador IA (maximizador) o el oponente (minimizador)
 
-    if (maximiza)
+    if (maximiza) //Si el jugador actual es el maximizador, busca el valor maximo entre los movimientos posibles
     {
         int mejor = -2;
 
@@ -50,9 +51,10 @@ int minmax(State st, int jugadorIA, int profundidad, int profundidadMax, int& no
 
                     hijo.make_move(x, y);
 
+                    //Llama recursivamente a minmax para evaluar el estado hijo, aumentando la profundidad
                     int valor = minmax(hijo, jugadorIA, profundidad + 1, profundidadMax, nodosVisitados, profundidadMaxAlcanzada);
 
-                    if (valor > mejor)
+                    if (valor > mejor) //Actualiza el mejor valor encontrado para el maximizador
                     {
                         mejor = valor;
                     }
@@ -78,6 +80,7 @@ int minmax(State st, int jugadorIA, int profundidad, int profundidadMax, int& no
 
                     int valor = minmax(hijo, jugadorIA, profundidad + 1, profundidadMax, nodosVisitados, profundidadMaxAlcanzada);
 
+                    //Actualiza el mejor valor encontrado para el minimizador, buscando el valor minimo entre los movimientos posibles
                     if (valor < mejor)
                     {
                         mejor = valor;
@@ -108,10 +111,11 @@ std::pair<int, int> jugador_minmax(const State& st, int profundidadMax, int& nod
             {
                 State hijo = st;
 
-                hijo.make_move(x, y);
+                hijo.make_move(x, y); //Genera el estado hijo aplicando el movimiento
 
                 int valor = minmax(hijo, jugadorIA, 1, profundidadMax, nodosVisitados, profundidadMaxAlcanzada);
 
+                //Actualiza el mejor movimiento encontrado para el jugador IA, buscando el valor maximo entre los movimientos posibles
                 if (valor > mejorValor)
                 {
                     mejorValor = valor;

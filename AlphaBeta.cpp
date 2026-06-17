@@ -33,9 +33,9 @@ int alphabeta(State st, int jugadorIA, int alpha, int beta, int profundidad, int
         return heuristica(st, jugadorIA);
     }
 
-    bool maximiza = (st.get_to_move() == jugadorIA);
+    bool maximiza = (st.get_to_move() == jugadorIA); //Determina si el jugador actual es el jugador IA (maximizador) o el oponente (minimizador)
 
-    if (maximiza)
+    if (maximiza) //Funciona como una version más sofisticada de minmax
     {
         int mejor = -1000;
 
@@ -56,12 +56,12 @@ int alphabeta(State st, int jugadorIA, int alpha, int beta, int profundidad, int
                         mejor = valor;
                     }
 
-                    if (mejor > alpha)
+                    if (mejor > alpha) //Actualiza el valor de alpha si se encuentra un valor mejor para el maximizador
                     {
                         alpha = mejor;
                     }
 
-                    if (beta <= alpha)
+                    if (beta <= alpha) //Si beta es menor o igual a alpha, se puede podar el resto de las ramas
                     {
                         return mejor;
                     }
@@ -129,9 +129,10 @@ std::pair<int,int> jugador_alphabeta(const State& st, int profundidadMax, int& n
 
                 hijo.make_move(x,y);
 
+                //Llama a la funcion alphabeta para evaluar el estado hijo generado por el movimiento, utilizando los valores iniciales de alpha y beta
                 int valor = alphabeta(hijo, jugadorIA, -1000, 1000, 1, profundidadMax, nodosVisitados, profundidadMaxAlcanzada);
 
-                if (valor > mejorValor)
+                if (valor > mejorValor) //Actualiza el mejor movimiento encontrado si se encuentra un valor mejor para el maximizador
                 {
                     mejorValor = valor;
                     mejorX = x;

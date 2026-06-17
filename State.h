@@ -1,4 +1,5 @@
 // Angel Leyton y Josefina Valdebenito 
+
 #ifndef STATE_H
 #define STATE_H
 
@@ -6,7 +7,7 @@
 #include <string>
 #include <array>
 
-struct InputException { };
+struct InputException { }; //Excepcion para entradas invalidas
 
 class State
 {
@@ -18,12 +19,14 @@ public:
         P1 = 1
     };
 
-    static const std::array<char, 3> DISP;
+    static const std::array<char, 3> DISP; //Array para imprimir el tablero
 
     State(int columnas, int filas, int k);
 
     bool full() const;
     void print() const;
+
+    //Funciones para los movimientos
 
     bool make_move(int x, int y);
 
@@ -47,7 +50,7 @@ private:
 
     int filled;
 
-    std::vector<std::vector<signed char>> sq;
+    std::vector<std::vector<signed char>> sq; //Tablero representado como una matriz de enteros (0, 1, -1)
 };
 
 #endif

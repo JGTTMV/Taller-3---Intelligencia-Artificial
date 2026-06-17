@@ -1,4 +1,5 @@
 // Angel Leyton y Josefina Valdebenito 
+
 #include "NegaMax.h"
 #include "GameLogic.h"
 
@@ -8,7 +9,7 @@
 int negamax(State st, int color, int profundidad, int profundidadMax, int jugadorIA, int& nodosVisitados, int& profundidadMaxAlcanzada)
 {
     nodosVisitados++;
-    if (profundidad > profundidadMaxAlcanzada)
+    if (profundidad > profundidadMaxAlcanzada) //Actualiza la profundidad maxima alcanzada
     {
         profundidadMaxAlcanzada = profundidad;
     }
@@ -25,7 +26,7 @@ int negamax(State st, int color, int profundidad, int profundidadMax, int jugado
 
     if (profundidad >= profundidadMax)
     {
-        return color * heuristica(st, jugadorIA);
+        return color * heuristica(st, jugadorIA); //Evalua el estado actual usando la heuristica
     }
 
     int mejor = -100000;
@@ -37,8 +38,9 @@ int negamax(State st, int color, int profundidad, int profundidadMax, int jugado
             if (st.is_valid_move(x, y))
             {
                 State hijo = st;
-                hijo.make_move(x, y);
+                hijo.make_move(x, y); //Genera el estado hijo aplicando el movimiento
 
+                //Llama recursivamente a negamax para evaluar el estado hijo, invirtiendo el color y aumentando la profundidad
                 int valor = -negamax(hijo, -color, profundidad + 1, profundidadMax, jugadorIA, nodosVisitados, profundidadMaxAlcanzada);
 
                 if (valor > mejor)
@@ -66,12 +68,12 @@ std::pair<int,int> jugador_negamax(const State& st, int profundidadMax, int& nod
         {
             if (st.is_valid_move(x, y))
             {
-                State hijo = st;
+                State hijo = st; //Crea un estado hijo a partir del estado actual
                 hijo.make_move(x, y);
 
                 int valor = -negamax(hijo, -color, 1, profundidadMax, jugadorIA, nodosVisitados, profundidadMaxAlcanzada);
 
-                if (valor > mejorValor)
+                if (valor > mejorValor) //Actualiza el mejor movimiento encontrado
                 {
                     mejorValor = valor;
                     mejorX = x;
